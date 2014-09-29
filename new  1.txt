@@ -1,0 +1,607 @@
+
+
+
+
+
+
+
+
+
+
+  MMM      MMM       KKK                          TTTTTTTTTTT      KKK
+  MMMM    MMMM       KKK                          TTTTTTTTTTT      KKK
+  MMM MMMM MMM  III  KKK  KKK  RRRRRR     OOOOOO      TTT     III  KKK  KKK
+  MMM  MM  MMM  III  KKKKK     RRR  RRR  OOO  OOO     TTT     III  KKKKK
+  MMM      MMM  III  KKK KKK   RRRRRR    OOO  OOO     TTT     III  KKK KKK
+  MMM      MMM  III  KKK  KKK  RRR  RRR   OOOOOO      TTT     III  KKK  KKK
+
+  MikroTik RouterOS 6.13 (c) 1999-2014       http://www.mikrotik.com/
+
+[?]             Gives the list of available commands
+command [?]     Gives help on the command and list of arguments
+
+[Tab]           Completes the command/word. If the input is ambiguous,
+                a second [Tab] gives possible options
+
+/               Move up to base level
+..              Move up one level
+/command        Use command at the base level
+[jgilcas@RTR-ANDMAL-COSTATORRE-002] > 
+[jgilcas@RTR-ANDMAL-COSTATORRE-002] > 
+[jgilcas@RTR-ANDMAL-COSTATORRE-002] > 
+[jgilcas@RTR-ANDMAL-COSTATORRE-002] > 
+[jgilcas@RTR-ANDMAL-COSTATORRE-002] > 
+[jgilcas@RTR-ANDMAL-COSTATORRE-002] > export compact 
+# sep/17/2014 15:45:38 by RouterOS 6.13
+# software id = L8VM-SK0A
+#
+/interface bridge
+add disabled=yes name=bridge1
+/interface ethernet
+set [ find default-name=ether1 ] name=Eth1_PPPoE
+set [ find default-name=ether2 ] name=Eth2_Troncal
+set [ find default-name=ether3 ] name=Eth3_BkVr speed=1Gbps
+set [ find default-name=ether4 ] name=Eth4_Vasari
+set [ find default-name=ether5 ] name=Eth5_Servidor
+set [ find default-name=ether6 ] name=Eth6_
+set [ find default-name=ether7 ] name=Eth7_
+set [ find default-name=ether8 ] name=Eth8_
+set [ find default-name=ether9 ] name=Eth9_Reset
+set [ find default-name=ether10 ] name=Eth10_CDE_Temporal
+set [ find default-name=sfp1 ] disabled=yes speed=100Mbps
+/interface pppoe-server
+add name=AMADSL service=PPPoE user=AMADSL
+add name=JohnHaggan service=PPPoE user=JohnHaggan
+add name=PPPoE_GuadalpinBanus service=Pppoe_Server user=GuadalpinBanus
+add name=PPPoE_NewVentura service=Pppoe_Server user=NewVentura
+add name=Pppoe-AndaluciaDelMar service=Pppoe_Server user=AndaluciaMar
+/ip neighbor discovery
+set PPPoE_GuadalpinBanus discover=no
+set PPPoE_NewVentura discover=no
+set Pppoe-AndaluciaDelMar discover=no
+/interface vlan
+add interface=Eth1_PPPoE l2mtu=1594 name=vlan400 vlan-id=400
+/ip ipsec proposal
+set [ find default=yes ] enc-algorithms=3des
+/ip pool
+add name=Pool_TCW ranges=10.0.0.2-10.0.7.254
+add name=Pool_Paypal ranges=10.22.5.20-10.22.5.254
+add name=Pool_Pppoe ranges=100.64.12.20-100.64.13.254
+add name=Pool_PublicsIp ranges=62.82.28.49-62.82.28.54
+add name=Pool-Eurona ranges=100.64.12.20-100.64.13.254
+/ppp profile
+set 0 dns-server=8.8.8.8 local-address=100.64.12.1 remote-address=Pool-Eurona
+add name=Pppoe_Profile
+add name=TestProfile rate-limit=200k/700k
+add name="2Mb(3Mbps_Eurona)" rate-limit=700k/3M
+add name=Desconectado rate-limit=1k/1k
+add name="4MB(6Mbps_Eurona)" rate-limit=700k/6M
+add name="1Mb(2Mbps_Eurona)" rate-limit=512k/2048k
+add name=2MB_Desconectado rate-limit=1k/1k
+add name=profile1 rate-limit=1M/7M
+add name=4Mb_Simetrico rate-limit=4M/4M
+add name=5MbUrb rate-limit=1500k/5M
+add name="3Mb(4Mbps_Eurona)" rate-limit=700k/4M remote-address=Pool-Eurona
+add name=6Mbps rate-limit=2400k/6M
+add change-tcp-mss=no dns-server=8.8.8.8,8.8.4.4 local-address=100.64.12.1 \
+    name=ProfilePppoe remote-address=Pool-Eurona
+add name=Pro_8 rate-limit=8M/8M
+add name=Pro_12 rate-limit=12M/12M
+add name=Pro_30 rate-limit=30M/30M
+set 17 local-address=100.64.12.1 remote-address=Pool-Eurona
+/interface pppoe-client
+add ac-name="" add-default-route=no allow=pap,chap,mschap1,mschap2 \
+    dial-on-demand=no disabled=yes interface=bridge1 keepalive-timeout=60 \
+    max-mru=1480 max-mtu=1480 mrru=disabled name=pppoe-out1 password=\
+    1RedNet2Torres profile=default service-name="" use-peer-dns=no user=\
+    RedNetTorres
+/ip neighbor discovery
+set pppoe-out1 discover=no
+/queue type
+set 9 pfifo-limit=25
+/routing ospf instance
+set [ find default=yes ] redistribute-connected=as-type-1 redistribute-static=\
+    as-type-1 router-id=172.27.17.60
+/snmp community
+set [ find default=yes ] name=3ur0n4m4l4g4
+/system logging action
+set 0 memory-lines=100
+set 1 disk-lines-per-file=2000
+set 3 remote=172.18.2.20
+/interface bridge port
+add bridge=bridge1 disabled=yes interface=Eth2_Troncal
+add bridge=bridge1 disabled=yes interface=Eth3_BkVr path-cost=30
+add bridge=bridge1 disabled=yes interface=Eth4_Vasari
+add bridge=bridge1 disabled=yes interface=Eth5_Servidor
+add bridge=bridge1 disabled=yes interface=Eth1_PPPoE
+add bridge=bridge1 disabled=yes interface=Eth10_CDE_Temporal
+add bridge=bridge1 disabled=yes interface=Eth7_
+/interface pppoe-server server
+add default-profile=ProfilePppoe disabled=no interface=Eth1_PPPoE service-name=\
+    PPPoE
+add authentication=pap,chap default-profile=ProfilePppoe disabled=no interface=\
+    vlan400 service-name=PPPoE_VLAN400
+/ip address
+add address=172.31.0.221/24 interface=Eth2_Troncal network=172.31.0.0
+add address=100.64.12.1/23 comment="Rango Eurona CGN" interface=Eth1_PPPoE \
+    network=100.64.12.0
+add address=172.27.22.131/26 comment="Rango Antenas" disabled=yes interface=\
+    Eth1_PPPoE network=172.27.22.128
+add address=172.27.22.129/26 interface=Eth1_PPPoE network=172.27.22.128
+add address=172.22.10.1/24 interface=Eth1_PPPoE network=172.22.10.0
+add address=172.21.10.133/24 interface=Eth2_Troncal network=172.21.10.0
+add address=172.27.17.60/24 comment="Rango Eurona Gestion Troncal" interface=\
+    Eth2_Troncal network=172.27.17.0
+add address=192.168.88.3/24 interface=Eth1_PPPoE network=192.168.88.0
+add address=10.0.0.1/29 network=10.0.0.0
+add address=192.168.1.22/24 interface=Eth1_PPPoE network=192.168.1.0
+/ip dns
+set max-udp-packet-size=512
+/ip firewall connection tracking
+set tcp-established-timeout=10m
+/ip firewall filter
+add action=drop chain=forward dst-address=188.119.249.0/24 dst-port=53 \
+    in-interface=Eth2_Troncal protocol=udp
+/ip firewall mangle
+add action=change-mss chain=forward new-mss=1440 protocol=tcp tcp-flags=syn \
+    tcp-mss=1441-65535
+add action=mark-routing chain=prerouting disabled=yes in-interface=Eth1_PPPoE \
+    new-routing-mark=Route_Eurona src-address=100.64.12.0/23
+add action=change-mss chain=forward new-mss=1440 protocol=tcp tcp-flags=syn \
+    tcp-mss=1441-65535
+add action=mark-routing chain=prerouting disabled=yes in-interface=!bridge1 \
+    new-routing-mark=Route_OnoVr src-address=62.82.28.0/24
+add action=mark-routing chain=prerouting disabled=yes in-interface=Eth1_PPPoE \
+    new-routing-mark=Route_Eurona src-address=100.64.12.0/23
+/ip proxy
+set max-cache-size=none parent-proxy=0.0.0.0
+/ip route
+add check-gateway=ping distance=1 gateway=172.27.17.1
+add check-gateway=ping distance=2 gateway=172.27.17.70
+add distance=1 dst-address=172.22.11.0/24 gateway=172.22.10.50
+add disabled=yes distance=1 dst-address=172.22.11.0/24 gateway=172.22.10.50
+add distance=1 dst-address=172.27.24.48/28 gateway=100.64.12.13
+add distance=1 dst-address=172.27.24.96/27 gateway=188.119.249.135
+add check-gateway=ping distance=1 dst-address=172.27.24.160/27 gateway=\
+    100.64.12.15
+add check-gateway=ping distance=1 dst-address=172.27.24.192/27 gateway=\
+    100.64.12.12 pref-src=100.64.12.1 scope=10
+add check-gateway=ping disabled=yes distance=111 dst-address=192.168.90.0/24 \
+    gateway=100.64.12.19
+/ip service
+set api address=0.0.0.0/0
+/ip upnp
+set allow-disable-external-interface=no
+/mpls ldp
+set enabled=yes lsr-id=172.27.17.60 transport-address=172.27.17.60
+/mpls ldp interface
+add interface=bridge1
+/ppp aaa
+set use-radius=yes
+/ppp secret
+add disabled=yes name=BehzadAbrar password=1Behzad2Abrar profile=\
+    "3Mb(4Mbps_Eurona)" service=pppoe
+add disabled=yes name=t3strednet password=t3st1ng profile=TestProfile service=\
+    pppoe
+add disabled=yes name=AbrahamMike password=1Abraham2Mike profile=Pppoe_Profile \
+    service=pppoe
+add disabled=yes name=AmandaGachot password=1Amanda2Gachot profile=\
+    Pppoe_Profile service=pppoe
+add disabled=yes name=c4test password=testc4 profile=Pppoe_Profile service=\
+    pppoe
+add name=TracyWilkes password=1Tracy2Wilkes profile="3Mb(4Mbps_Eurona)" \
+    remote-address=188.119.249.80 service=pppoe
+add disabled=yes name=AndriIngolfsson password=1Andri2Ingolfsson profile=\
+    "2Mb(3Mbps_Eurona)" service=pppoe
+add disabled=yes name=GisbertKolmo password=1Gisbert2Kolmo profile=\
+    "2Mb(3Mbps_Eurona)" service=pppoe
+add disabled=yes name=SandraBrooker password=1Sandra2Brooker profile=\
+    "2Mb(3Mbps_Eurona)" service=pppoe
+add disabled=yes name=CandidBurkart password=1Candid2Burkart profile=\
+    "3Mb(4Mbps_Eurona)" service=pppoe
+add disabled=yes name=AnnaAtkinson password=1Anna2Atkinson profile=\
+    "1Mb(2Mbps_Eurona)" service=pppoe
+add disabled=yes name=JohnHarrington password=1John2Harrington profile=\
+    Desconectado
+add disabled=yes name=JuergenKoenig password=1Juergen2Koenig profile=\
+    "2Mb(3Mbps_Eurona)" service=pppoe
+add disabled=yes name=CusCus password=1Cus2Cus profile="2Mb(3Mbps_Eurona)" \
+    service=pppoe
+add disabled=yes name=MonicaAlbukerque password=1Monica2Albukerque profile=\
+    2MB_Desconectado service=pppoe
+add disabled=yes name=JaniceLewis password=1Janice2Lewis profile=\
+    "1Mb(2Mbps_Eurona)"
+add disabled=yes name=ManoloSantana password=1Manolo2Santana profile=\
+    Desconectado service=pppoe
+add disabled=yes name=LaConcha password=1La2Concha profile="1Mb(2Mbps_Eurona)" \
+    service=pppoe
+add disabled=yes name=DavidFrancis password=1David2Francis profile=\
+    "2Mb(3Mbps_Eurona)"
+add disabled=yes name=LesRoches password=1Les2Roches profile=\
+    "4MB(6Mbps_Eurona)" service=pppoe
+add disabled=yes name=IrinaYung password=1Irina2Yung profile=\
+    "4MB(6Mbps_Eurona)" service=pppoe
+add disabled=yes name=RoyWest password=1Roy2West profile="2Mb(3Mbps_Eurona)"
+add name=DavidNixon password=1David2Nixon profile=5MbUrb remote-address=\
+    188.119.249.40 service=pppoe
+add disabled=yes name=VicHalle password=1Vic2Halle profile="4MB(6Mbps_Eurona)" \
+    service=pppoe
+add name=RichardWelton password=1Richard2Welton profile="3Mb(4Mbps_Eurona)" \
+    remote-address=62.82.28.53 service=pppoe
+add disabled=yes name=CarmelMarbellacoast password=1Carmel2Marbellacoast \
+    profile="4MB(6Mbps_Eurona)" service=pppoe
+add disabled=yes name=NodoJacaranda password=1Nodo2Jacaranda profile=\
+    "4MB(6Mbps_Eurona)" service=pppoe
+add disabled=yes name=EssiburnBusiness password=1Essiburn2Business profile=\
+    "1Mb(2Mbps_Eurona)" service=pppoe
+add disabled=yes name=RichardBowman password=1Richard2Bowman profile=\
+    Desconectado service=pppoe
+add disabled=yes name=LeeVickers password=1Lee2Vickers profile=Desconectado \
+    service=pppoe
+add disabled=yes name=JayneHerbert password=1Jayne2Herbert profile=\
+    "1Mb(2Mbps_Eurona)" service=pppoe
+add disabled=yes name=ChrisWoolcott password=1Chris2Woolcott profile=\
+    Desconectado service=pppoe
+add name=JoseMariaNogueroles password=1JoseMaria2Nogueroles profile=\
+    "2Mb(3Mbps_Eurona)" remote-address=188.119.249.28 service=pppoe
+add disabled=yes name=RonaldEllis password=1Ronald2Ellis profile=\
+    "2Mb(3Mbps_Eurona)" service=pppoe
+add disabled=yes name=GreameHay password=1Greame2Hay profile=\
+    "2Mb(3Mbps_Eurona)" service=pppoe
+add disabled=yes name=JonathanWall password=1Jonathan2Wall profile=\
+    "1Mb(2Mbps_Eurona)" service=pppoe
+add disabled=yes name=JohnReidy password=1John2Reidy profile=\
+    "2Mb(3Mbps_Eurona)" service=pppoe
+add name=GuadalpinBanus password=1Guadalpin2Banus profile=Pro_8 remote-address=\
+    100.64.12.17 service=pppoe
+add disabled=yes name=testc4 password=c4test profile="4MB(6Mbps_Eurona)"
+add disabled=yes name=RichardWilliams password=1Richard2Williams profile=\
+    2MB_Desconectado service=pppoe
+add disabled=yes name=BarrySmith password=1Barry2Smith profile=Desconectado \
+    service=pppoe
+add disabled=yes name=PaulRipley password=1Paul2Ripley profile=\
+    "2Mb(3Mbps_Eurona)" service=pppoe
+add disabled=yes name=PhilipSadd password=1Philip2Sadd profile=\
+    "4MB(6Mbps_Eurona)" service=pppoe
+add disabled=yes name=CarolineTuempling password=1Caroline2Tuempling profile=\
+    "2Mb(3Mbps_Eurona)" service=pppoe
+add disabled=yes name=jgil password=jgil profile=6Mbps
+add disabled=yes name=NickTulip password=1Nick2Tulip profile=\
+    "4MB(6Mbps_Eurona)" service=pppoe
+add disabled=yes name=LawrenceJordan password=1Lawrence2Jordan profile=\
+    "2Mb(3Mbps_Eurona)" service=pppoe
+add name=ManuelBerrocal password=1Manuel2Berrocal profile=4Mb_Simetrico \
+    remote-address=100.64.12.18 service=pppoe
+add disabled=yes name=MBerrocal password=1M2Berrocal profile=\
+    "4MB(6Mbps_Eurona)" service=pppoe
+add disabled=yes name=OlegStolyoirov password=1Oleg2Stolyoirov profile=\
+    "2Mb(3Mbps_Eurona)" service=pppoe
+add disabled=yes name=PalacioEstepona password=1Palacio2Estepona profile=\
+    "4MB(6Mbps_Eurona)" service=pppoe
+add disabled=yes name=TorresBar password=1Torres2Bar profile=\
+    "4MB(6Mbps_Eurona)" service=pppoe
+add disabled=yes name=SuzannaDavis password=1Suzanna2Davis profile=\
+    "2Mb(3Mbps_Eurona)" service=pppoe
+add disabled=yes name=MarieKearus password=1Marie2Kearus profile=\
+    "2Mb(3Mbps_Eurona)" service=pppoe
+add disabled=yes name=ManilvaGreen password=1Manilva2Green profile=\
+    "4MB(6Mbps_Eurona)" service=pppoe
+add disabled=yes name=ClaireAldridge password=1Claire2Aldridge profile=\
+    "2Mb(3Mbps_Eurona)" service=pppoe
+add disabled=yes name=PaulMoore password=1Paul2Moore profile=\
+    "4MB(6Mbps_Eurona)" service=pppoe
+add disabled=yes name=carlos password=1carlos2 profile=profile1 service=pppoe
+add disabled=yes name=JonathanLobban password=1Jonathan2Lobban profile=profile1 \
+    service=pppoe
+add disabled=yes name=ManuelBerrocal3 password=1Manuel2Berrocal3 profile=\
+    "4MB(6Mbps_Eurona)" service=pppoe
+add disabled=yes name=yavor password=ivk0v profile=6Mbps
+add disabled=yes name=VasariCenterCrown password=1Vasari2CenterCrown profile=\
+    Desconectado
+add name=LeeClayton password=1Lee2Clayton profile="4MB(6Mbps_Eurona)" \
+    remote-address=62.82.28.55 service=pppoe
+add disabled=yes name=PhilipDuke password=1Philip2Duke profile=\
+    "2Mb(3Mbps_Eurona)" service=pppoe
+add name=AMADSL password=1AM2ADSL profile=Pro_12 remote-address=188.119.249.135 \
+    service=pppoe
+add disabled=yes name=AndaluciaMarHs password=1AndaluciaMar2Hs profile=\
+    "4MB(6Mbps_Eurona)" service=pppoe
+add disabled=yes name=SuzannaDavis-Liria password=1Suzanna2Davis profile=\
+    "4MB(6Mbps_Eurona)" service=pppoe
+add disabled=yes name=NicolaiNikins password=1Nicolai2Nikins profile=\
+    "4MB(6Mbps_Eurona)" service=pppoe
+add disabled=yes name=CondominiumServices password=1Condominium2Services \
+    profile="4MB(6Mbps_Eurona)" service=pppoe
+add disabled=yes name=RussellStuart password=1Russell2Stuart profile=\
+    "2Mb(3Mbps_Eurona)" service=pppoe
+add disabled=yes name=AnnLister password=1Ann2Lister profile=\
+    "2Mb(3Mbps_Eurona)" service=pppoe
+add disabled=yes name=AndrewLothian password=1Andrew2Lothian profile=\
+    "1Mb(2Mbps_Eurona)"
+add disabled=yes name=AnLister password=1An2Lister profile="2Mb(3Mbps_Eurona)" \
+    service=pppoe
+add disabled=yes name=NigelCox password=1Nigel2Cox profile="2Mb(3Mbps_Eurona)" \
+    service=pppoe
+add disabled=yes name=LeopoldBrees password=1Leopold2Brees profile=\
+    "4MB(6Mbps_Eurona)" service=pppoe
+add disabled=yes name=ShirleyGraham password=1Shirley2Graham profile=\
+    "2Mb(3Mbps_Eurona)" service=pppoe
+add disabled=yes name=RoyAshford password=1Roy2Ashford profile=\
+    "2Mb(3Mbps_Eurona)"
+add disabled=yes name=LianaVarini password=1Liana2Varini profile=\
+    "4MB(6Mbps_Eurona)" service=pppoe
+add disabled=yes name=SveinAndersen password=1Svein2Andersen profile=\
+    "4MB(6Mbps_Eurona)" service=pppoe
+add disabled=yes name=PavelSinitsyn password=1Pavel2Sinitsyn profile=\
+    "4MB(6Mbps_Eurona)" service=pppoe
+add disabled=yes name=AnnaEller password=1Anna2Eller profile=\
+    "4MB(6Mbps_Eurona)" service=pppoe
+add disabled=yes name=INST_ORBIT password=ORBIT10Y profile="4MB(6Mbps_Eurona)"
+add disabled=yes name=SimonaLongoni password=1Simona2Longoni profile=\
+    "4MB(6Mbps_Eurona)" service=pppoe
+add name=DimasMontejano password=1Dimas2Montejano profile="4MB(6Mbps_Eurona)" \
+    remote-address=62.82.28.58 service=pppoe
+add disabled=yes name=Judith password=1Judith profile="4MB(6Mbps_Eurona)" \
+    service=pppoe
+add disabled=yes name=BiancaFritz password=11Bianca2Fritz profile=\
+    "4MB(6Mbps_Eurona)"
+add disabled=yes name=CrisGonz password=1Cris2Gonz profile="3Mb(4Mbps_Eurona)" \
+    service=pppoe
+add disabled=yes name=LyndonJones password=1Lyndon2Jones profile=\
+    "4MB(6Mbps_Eurona)" service=pppoe
+add disabled=yes name=JillianHelm password=1Jillian2Helm profile=\
+    "3Mb(4Mbps_Eurona)" service=pppoe
+add disabled=yes name=StephenBastian password=1Stephen2Bastian profile=\
+    "3Mb(4Mbps_Eurona)" service=pppoe
+add disabled=yes name=JenniferHolbrom password=1Jennifer2Holbrom profile=\
+    "3Mb(4Mbps_Eurona)" service=pppoe
+add disabled=yes name=ColinAntell password=1Colin2Antell profile=\
+    "3Mb(4Mbps_Eurona)" service=pppoe
+add disabled=yes name=DavidSmith password=1David2Smith profile=\
+    "3Mb(4Mbps_Eurona)" service=pppoe
+add disabled=yes name=IvanKirilyuk password=1Ivan2Kirilyuk profile=\
+    "3Mb(4Mbps_Eurona)"
+add disabled=yes name=RogelioNicolas password=1Rogelio2Nicolas profile=\
+    "4MB(6Mbps_Eurona)"
+add comment=RojelioNicolas disabled=yes name=RojNic password=1Roj2Nic profile=\
+    "3Mb(4Mbps_Eurona)" service=pppoe
+add disabled=yes name=JulieWhite password=1Julie2White profile=\
+    "3Mb(4Mbps_Eurona)" service=pppoe
+add disabled=yes name=EvertPanday password=1Evert2Panday profile=\
+    "3Mb(4Mbps_Eurona)" service=pppoe
+add disabled=yes name=MajesticGrandsteam password=1Majestic2Grandsteam profile=\
+    4Mb_Simetrico
+add disabled=yes name=RamalInversiones password=1Ramal2Inversiones profile=\
+    "3Mb(4Mbps_Eurona)" service=pppoe
+add disabled=yes name=StefanCoussee password=1Stefan2Coussee profile=\
+    "1Mb(2Mbps_Eurona)" service=pppoe
+add name=LushGartens password=1Lush2Gartens profile="3Mb(4Mbps_Eurona)" \
+    remote-address=188.119.249.96 service=pppoe
+add disabled=yes name=MBerrocal2 password=1M2Berrocal2 profile=\
+    "4MB(6Mbps_Eurona)" service=pppoe
+add disabled=yes name=PatrickJones password=1Patrick2Jones profile=\
+    "4MB(6Mbps_Eurona)" service=pppoe
+add disabled=yes name=JuanRivera password=1Juan2Rivera profile=\
+    "3Mb(4Mbps_Eurona)" service=pppoe
+add name=CaboVenecia password=1Cabo2Venecia profile=4Mb_Simetrico \
+    remote-address=62.82.28.52 service=pppoe
+add disabled=yes name=AlexandrsDaderko password=1Alexandrs2Daderko profile=\
+    "3Mb(4Mbps_Eurona)"
+add disabled=yes name=instalador password=instalador profile=6Mbps service=\
+    pppoe
+add disabled=yes name=DomoHomeControl password=1DomoHome2Control profile=\
+    "4MB(6Mbps_Eurona)" service=pppoe
+add disabled=yes name=KenParker password=1Ken2Parker profile=\
+    "4MB(6Mbps_Eurona)" service=pppoe
+add disabled=yes name=AlexandreZhogov password=1Alexandre2Zhogov profile=\
+    "3Mb(4Mbps_Eurona)" service=pppoe
+add disabled=yes name=MaryKeons password=1Mary2Keons profile=\
+    "3Mb(4Mbps_Eurona)" service=pppoe
+add disabled=yes name=DouglasFrederick password=1Douglas2Frederick profile=\
+    "3Mb(4Mbps_Eurona)" service=pppoe
+add disabled=yes name=PatrickBeirne password=1Patrick2Beirne profile=\
+    "3Mb(4Mbps_Eurona)" service=pppoe
+add disabled=yes name=IvorRowe password=1Ivor2Rowe profile="3Mb(4Mbps_Eurona)" \
+    service=pppoe
+add disabled=yes name=RoyWebster password=1Roy2Webster profile=\
+    "3Mb(4Mbps_Eurona)" service=pppoe
+add disabled=yes name=LeeVaughan password=1Lee2Vaughan profile=\
+    "3Mb(4Mbps_Eurona)" service=pppoe
+add disabled=yes name=SaiedMahdavien password=1Saied2Mahdavien profile=\
+    "3Mb(4Mbps_Eurona)" service=pppoe
+add disabled=yes name=SharonPeterson password=1Sharon2Peterson profile=\
+    "3Mb(4Mbps_Eurona)" service=pppoe
+add disabled=yes name=FranciscoCarrasco password=1Francisco2Carrasco profile=\
+    "3Mb(4Mbps_Eurona)" service=pppoe
+add disabled=yes name=RalfLudwig password=1Ralf2Ludwig profile=\
+    "4MB(6Mbps_Eurona)" service=pppoe
+add disabled=yes name=MarbellaGolfAcademy password=1Marbella2GolfAcademy \
+    profile="3Mb(4Mbps_Eurona)"
+add name=AlqueriaCCTV password=1Alqueria2CCTV profile=4Mb_Simetrico \
+    remote-address=188.119.249.30
+add disabled=yes name=MartinJohansson password=1Martin2Johansson profile=\
+    "4MB(6Mbps_Eurona)"
+add disabled=yes name=CuzCuz password=1Cuz2Cuz profile="4MB(6Mbps_Eurona)" \
+    service=pppoe
+add name=UrbVillacana password=1Urb2Villacana profile=Pro_30 remote-address=\
+    100.64.12.12
+add disabled=yes name=ElioChianese password=1Elio2Chianese profile=\
+    "2Mb(3Mbps_Eurona)" service=pppoe
+add name=NewGuadalpin password=1New2Guadalpin profile=Pro_8 remote-address=\
+    100.64.12.19 service=pppoe
+add disabled=yes name=UrbVentura password=1Urb2Ventura profile=6Mbps service=\
+    pppoe
+add name=NewVentura password=1New2Ventura profile=Pro_12 remote-address=\
+    100.64.12.15 service=pppoe
+add disabled=yes name=LoreneStuart password=1Lorene2Stuart profile=\
+    "2Mb(3Mbps_Eurona)" service=pppoe
+add name=JaneMcCollum password=1Jane2McCollum profile=Desconectado service=\
+    pppoe
+add disabled=yes name=CarlyRodeo5 password=1Carly2Rodeo5 profile=\
+    "3Mb(4Mbps_Eurona)" service=pppoe
+add disabled=yes name=GriseldaThomson password=1Griselda2Thomson profile=\
+    "3Mb(4Mbps_Eurona)" service=pppoe
+add disabled=yes name=INST_ARESINFOCOM password=ARESINFOCOM100Z profile=\
+    "2Mb(3Mbps_Eurona)" service=pppoe
+add name=EOC password=EOC profile=Pro_12 remote-address=188.119.249.42
+add disabled=yes name=AdamLewis password=1Adam2Lewis profile=\
+    "4MB(6Mbps_Eurona)"
+add name=KeithBarber password=1Keith2Barber profile="4MB(6Mbps_Eurona)" \
+    remote-address=188.119.249.45
+add disabled=yes name=IngerAhauge password=1Inger2Ahauge profile=\
+    "3Mb(4Mbps_Eurona)" service=pppoe
+add name=TecnoMarbell password=1Tecno2Marbell profile=6Mbps remote-address=\
+    188.119.249.53 service=pppoe
+add disabled=yes name=DirkThys password=1Dirk2Thys profile="4MB(6Mbps_Eurona)" \
+    service=pppoe
+add disabled=yes name=BrianWetherell password=1Brian2Wetherell profile=\
+    "3Mb(4Mbps_Eurona)" service=pppoe
+add disabled=yes name=MarinaSligter password=1Marina2Sligter profile=\
+    "3Mb(4Mbps_Eurona)"
+add disabled=yes name=ChistopherCollart password=1Chistopher2Collart profile=\
+    "3Mb(4Mbps_Eurona)"
+add disabled=yes name=AntonioBellido password=1Antonio2Bellido profile=\
+    "2Mb(3Mbps_Eurona)" service=pppoe
+add disabled=yes name=eurona password=eurona profile=6Mbps service=pppoe
+add disabled=yes name=BenDeJonge password=1Ben2DeJonge profile=\
+    "3Mb(4Mbps_Eurona)" service=pppoe
+add disabled=yes name=AntheaSpyropoulos password=1Anthea2Spyropoulos profile=\
+    "3Mb(4Mbps_Eurona)" service=pppoe
+add disabled=yes name=ShawnBray password=1Shawn2Bray profile=\
+    "4MB(6Mbps_Eurona)" service=pppoe
+add disabled=yes name=IanThomas password=1Ian2Thomas profile=\
+    "2Mb(3Mbps_Eurona)" service=pppoe
+add disabled=yes name=HelenRichirdson password=1Helen2Richirdson profile=\
+    "2Mb(3Mbps_Eurona)" service=pppoe
+add disabled=yes name=MikeDyson password=1Mike2Dyson profile=\
+    "2Mb(3Mbps_Eurona)" service=pppoe
+add name=Granados password=Granados profile=Pro_8 remote-address=100.64.12.13 \
+    service=pppoe
+add disabled=yes name=CristianAlvarez password=1Cristian2Alvarez profile=\
+    "3Mb(4Mbps_Eurona)" service=pppoe
+add disabled=yes name=JacquesDaireaux password=1Jacques2Daireaux profile=\
+    "3Mb(4Mbps_Eurona)" service=pppoe
+add disabled=yes name=JoopLotringuin password=1Joop2Lotringuin profile=\
+    "1Mb(2Mbps_Eurona)" service=pppoe
+add disabled=yes name=TimHopkins password=1Tim2Hopkins profile=\
+    "1Mb(2Mbps_Eurona)" service=pppoe
+add disabled=yes name=WilliamRondelez password=1William2Rondelez profile=\
+    "2Mb(3Mbps_Eurona)" service=pppoe
+add disabled=yes name=JoseAntonioAllue password=1JoseAntonio2Allue profile=\
+    "2Mb(3Mbps_Eurona)" service=pppoe
+add disabled=yes name=DonalMacDonald password=1Donal2MacDonald profile=\
+    "2Mb(3Mbps_Eurona)" service=pppoe
+add name=CarolineVonTuempling password=1CarolineVon2Tuempling profile=\
+    "4MB(6Mbps_Eurona)" remote-address=188.119.249.112 service=pppoe
+add disabled=yes name=Chammah password=1Chammah2 profile=Desconectado
+add disabled=yes name=PetterCotton30 password=1Petter2Cotton30 profile=\
+    "3Mb(4Mbps_Eurona)" service=pppoe
+add disabled=yes name=TecnoMarbell6 password=1Tecno2Marbell6 profile=\
+    "4MB(6Mbps_Eurona)" service=pppoe
+add disabled=yes name=ThomasDavidMarshall password=1ThomasDavid2Marshall \
+    profile="4MB(6Mbps_Eurona)" service=pppoe
+add disabled=yes name=VigertLarsson password=1Vigert2Larsson profile=\
+    "2Mb(3Mbps_Eurona)" service=pppoe
+add disabled=yes name="cristina gonzalez garcia" password=\
+    "1cristina gonzalez 2garcia" profile="3Mb(4Mbps_Eurona)"
+add disabled=yes name=SergioMasero password=1Sergio2Masero profile=\
+    "2Mb(3Mbps_Eurona)" service=pppoe
+add disabled=yes name=JoseHerrena password=1Jose2Herrena profile=\
+    "2Mb(3Mbps_Eurona)" service=pppoe
+add disabled=yes name=VincentVillacana password=1Vincent2Villacana profile=\
+    "4MB(6Mbps_Eurona)" service=pppoe
+add disabled=yes name=JorgeuGunner password=1Jorgeu2Gunner profile=\
+    "4MB(6Mbps_Eurona)" service=pppoe
+add disabled=yes name=PerFrolander password=1Per2Frolander profile=\
+    "2Mb(3Mbps_Eurona)" service=pppoe
+add name=testconrisa password=1testconrisa profile=6Mbps service=pppoe
+add comment="Creado En Demo Para Posible Entrada En Comunidad No Borrar!!!!" \
+    disabled=yes name=LenatHall password=1Lenat2Hall profile=Pro_12
+add disabled=yes name=TommySodeberg password=1Tommy2Sodeberg profile=Pro_12 \
+    remote-address=188.119.249.114 service=pppoe
+add name=MoayadShatat password=1Moayad2Shatat profile=Pro_12
+add name=JohnHaggan password=1John2Haggan profile=Pro_8
+add name=JasonTest password=1Jason2Test profile=Pro_8
+add disabled=yes name=RoselPeesson password=1Rosel2Peesson profile=\
+    "2Mb(3Mbps_Eurona)"
+add name=romanbagirov password=osf46870 profile="4MB(6Mbps_Eurona)" \
+    remote-address=188.119.249.122 service=pppoe
+add name=InfosofinikSL password=1Infosofinik2SL profile="4MB(6Mbps_Eurona)" \
+    remote-address=188.119.249.124 service=pppoe
+add disabled=yes name=AnnaTildesley password=1Anna2Tildesley profile=Pro_12
+add name=villacana password=villacana profile=Pro_12 service=pppoe
+add name=am password=am profile=Pro_30 remote-address=100.64.12.16
+add name=CasaAndalucia password=1Casa2Andalucia profile="4MB(6Mbps_Eurona)" \
+    remote-address=188.119.249.129 service=pppoe
+/queue interface
+set Eth1_PPPoE queue=ethernet-default
+set Eth2_Troncal queue=ethernet-default
+set Eth3_BkVr queue=ethernet-default
+set Eth4_Vasari queue=ethernet-default
+set Eth5_Servidor queue=ethernet-default
+/radius
+add address=172.18.2.130 secret=3ur0n4 service=ppp
+add address=172.18.2.131 secret=3ur0n4 service=ppp
+/routing filter
+add action=accept chain=ospf-out comment="Direccionamiento Interno" prefix=\
+    100.64.12.0/23
+add action=accept chain=ospf-out comment="Direccionamiento Interno Torres" \
+    prefix=172.27.22.128/26
+add action=accept chain=ospf-out comment="Rango antiguo de torres. el un /24" \
+    prefix=172.22.10.0/24
+add action=accept chain=ospf-out comment=VillaCana prefix=172.22.11.0/24
+add action=accept chain=ospf-out comment=VillaCana prefix=172.27.24.192/27
+add action=accept chain=ospf-out comment="Andalucia Del Mar" prefix=\
+    172.27.24.96/27
+add action=accept chain=ospf-out comment="Guadalpin Banus" prefix=\
+    192.168.90.0/24
+add action=accept chain=ospf-out comment=KeithBarber prefix=188.119.249.45
+add action=accept chain=ospf-out comment="Alquer\EDa CCTV" prefix=\
+    188.119.249.30
+add action=accept chain=ospf-out comment="David Nixon" prefix=188.119.249.40
+add action=accept chain=ospf-out comment="Playa Bella" prefix=188.119.249.133
+add action=accept chain=ospf-out comment=EOC prefix=188.119.249.42
+add action=accept chain=ospf-out comment=Ventura prefix=172.27.24.160/27
+add action=accept chain=ospf-out comment=Granados prefix=172.27.24.48/28
+add action=accept chain=ospf-out comment=TecnoMarbell prefix=188.119.249.53
+add action=accept chain=ospf-out comment="Jose Maria Nogueroles" prefix=\
+    188.119.249.28
+add action=accept chain=ospf-out comment="IP TV TEST" prefix=188.119.249.70
+add action=accept chain=ospf-out comment=TracyWilkes prefix=188.119.249.80
+add action=accept chain=ospf-out comment=LushGartens prefix=188.119.249.96
+add action=accept chain=ospf-out comment=CarolineVonTuempling prefix=\
+    188.119.249.112
+add action=accept chain=ospf-out comment=TommySodeberg prefix=188.119.249.114
+add action=accept chain=ospf-out comment=romanbagirov prefix=188.119.249.122
+add action=accept chain=ospf-out comment=InfosofinikSL prefix=188.119.249.124
+add action=accept chain=ospf-out comment=CasaAndalucia prefix=188.119.249.129
+add action=accept chain=ospf-out comment="Andalucia Del Mar" prefix=\
+    188.119.249.135
+add action=discard chain=ospf-out
+/routing ospf interface
+add authentication=md5 authentication-key=3ur0n40spf interface=Eth2_Troncal \
+    network-type=ptmp
+/routing ospf network
+add area=backbone network=172.27.17.0/24
+/snmp
+set enabled=yes location=Torres trap-community=3ur0n4m4l4g4
+/system clock
+set time-zone-name=Europe/Madrid
+/system identity
+set name=RTR-ANDMAL-COSTATORRE-002
+/system logging
+set 0 action=disk
+set 1 action=disk
+set 2 action=disk
+set 3 action=disk
+add action=remote topics=critical
+add action=remote topics=error
+add action=remote topics=info
+add action=remote topics=warning
+/system ntp client
+set enabled=yes mode=unicast primary-ntp=172.18.4.1
+/tool graphing interface
+add
+/tool graphing queue
+add
+[jgilcas@RTR-ANDMAL-COSTATORRE-002] > 
